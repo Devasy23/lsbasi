@@ -119,7 +119,7 @@ class Interpreter(object):
         """Arithmetic expression parser / interpreter.
 
         expr   : factor ((MUL | DIV) factor)*
-        factor : INTEGER
+        factor : INTEGER 
         """
         result = self.factor()
 

@@ -11,9 +11,9 @@
 # EOF (end-of-file) token is used to indicate that
 # there is no more input left for lexical analysis
 (INTEGER, PLUS, MINUS, MUL, DIV, LPAREN, RPAREN, ID, ASSIGN,
- BEGIN, END, SEMI, DOT, EOF) = (
+ BEGIN, END, SEMICOLON, DOT, EOF) = (
     'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', '(', ')', 'ID', 'ASSIGN',
-    'BEGIN', 'END', 'SEMI', 'DOT', 'EOF'
+    'BEGIN', 'END', 'SEMICOLON', 'DOT', 'EOF'
 )
 
 
@@ -118,7 +118,7 @@ class Lexer(object):
 
             if self.current_char == ';':
                 self.advance()
-                return Token(SEMI, ';')
+                return Token(SEMICOLON, ';')
 
             if self.current_char == '+':
                 self.advance()
@@ -248,14 +248,14 @@ class Parser(object):
     def statement_list(self):
         """
         statement_list : statement
-                       | statement SEMI statement_list
+                       | statement SEMICOLON statement_list
         """
         node = self.statement()
 
         results = [node]
 
-        while self.current_token.type == SEMI:
-            self.eat(SEMI)
+        while self.current_token.type == SEMICOLON:
+            self.eat(SEMICOLON)
             results.append(self.statement())
 
         if self.current_token.type == ID:
@@ -367,7 +367,7 @@ class Parser(object):
         compound_statement : BEGIN statement_list END
 
         statement_list : statement
-                       | statement SEMI statement_list
+                       | statement SEMICOLON statement_list
 
         statement : compound_statement
                   | assignment_statement

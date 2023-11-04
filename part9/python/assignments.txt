@@ -8,4 +8,5 @@ BEGIN
     END;
 
     x := 11;
+    devasnh := 111;
 END.
