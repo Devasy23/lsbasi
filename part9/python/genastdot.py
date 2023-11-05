@@ -16,9 +16,9 @@ class ASTVisualizer(NodeVisitor):
         self.ncount = 1
         self.dot_header = [textwrap.dedent("""\
         digraph astgraph {
-          node [shape=circle, fontsize=12, fontname="Courier", height=.1];
+          node [shape=circle, fontsize=12, fontname="Courier", height=.1, color=blue, fillcolor=lightblue, style=filled];
           ranksep=.3;
-          edge [arrowsize=.5]
+          edge [arrowsize=.5, color=red];
 
         """)]
         self.dot_body = []
