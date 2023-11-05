@@ -11,9 +11,9 @@
 # EOF (end-of-file) token is used to indicate that
 # there is no more input left for lexical analysis
 (INTEGER, PLUS, MINUS, MUL, DIV,FDIV, LPAREN, RPAREN, ID, ASSIGN,
-  SEMICOLON, EXP,  EOF) = (
+  SEMICOLON, EXP,FLOAT,  EOF) = (
     'INTEGER', 'PLUS', 'MINUS', 'MUL', 'DIV', 'FDIV', '(', ')', 'ID', 'ASSIGN',
-     'SEMICOLON','EXP', 'EOF'
+     'SEMICOLON','EXP','FLOAT', 'EOF'
 )
 
 
@@ -81,8 +81,44 @@ class Lexer(object):
         while self.current_char is not None and self.current_char.isdigit():
             result += self.current_char
             self.advance()
-        return int(result)
+        if self.current_char == '.':
+            result += self.current_char
+            self.advance()
+            while (
+                self.current_char is not None and
+                self.current_char.isdigit()
+            ):
+                result += self.current_char
+                self.advance()
+            token = Token('FLOAT', float(result))
+            return token
+        return Token('INTEGER', int(result))
 
+    def real(self):
+        """Return a (multidigit) real consumed from the input."""
+        result = ''
+        while self.current_char is not None and self.current_char.isdigit():
+            result += self.current_char
+            self.advance()
+        if self.current_char == '.':
+            result += self.current_char
+            self.advance()
+            while (
+                self.current_char is not None and
+                self.current_char.isdigit()
+            ):
+                result += self.current_char
+                self.advance()
+            token = Token('FLOAT', float(result))
+            return token
+
+    def get_next_token(self):
+        while self.current_char is not None:
+            ...
+            if self.current_char.isdigit():
+                return self.real()
+            ...
+    
     def _id(self):
         """Handle identifiers and reserved keywords"""
         result = ''
@@ -109,7 +145,7 @@ class Lexer(object):
                 return self._id()
 
             if self.current_char.isdigit():
-                return Token(INTEGER, self.integer())
+                return self.integer()            
 
             if self.current_char == ':' and self.peek() == '=':
                 self.advance()
@@ -360,6 +396,7 @@ class Parser(object):
         """factor : PLUS factor
                   | MINUS factor
                   | INTEGER
+                  | FLOAT
                   | LPAREN expr RPAREN
                   | variable
         """
@@ -374,6 +411,9 @@ class Parser(object):
             return node
         elif token.type == INTEGER:
             self.eat(INTEGER)
+            return Num(token)
+        elif token.type == FLOAT:
+            self.eat(FLOAT)
             return Num(token)
         elif token.type == LPAREN:
             self.eat(LPAREN)
@@ -457,8 +497,13 @@ class Interpreter(NodeVisitor):
         elif node.op.type == EXP:
             return self.visit(node.left) ** self.visit(node.right)
 
+    # def visit_Num(self, node):
+    #     return node.value
     def visit_Num(self, node):
-        return node.value
+        if node.token.type == INTEGER:
+            return node.token.value
+        elif node.token.type == FLOAT:
+            return node.token.value
 
     def visit_UnaryOp(self, node):
         op = node.op.type

@@ -1,6 +1,6 @@
-chintn := 100//3;
+chintn := 100.11/3;
 chintan := chintn/3;
-number := 2;
+number := 2.0;
 a := number;
 b := 10 * a + 10 * number / 4;
 c := a - - b;
