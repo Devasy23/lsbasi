@@ -54,7 +54,7 @@ class ASTVisualizer(NodeVisitor):
         self.dot_body.append(s)
 
     def visit_Compound(self, node):
-        s = '  node{} [label="Compound"]\n'.format(self.ncount)
+        s = '  node{} [label="Code"]\n'.format(self.ncount)
         self.dot_body.append(s)
         node._num = self.ncount
         self.ncount += 1
@@ -101,7 +101,7 @@ def main():
     )
     argparser.add_argument(
         'fname',
-        help='Pascal source file'
+        help='Please specify a filename for the source code.'
     )
     args = argparser.parse_args()
     fname = args.fname
