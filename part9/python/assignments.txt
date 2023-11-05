@@ -1,12 +1,9 @@
-BEGIN
-
-    BEGIN
-        number := 2;
-        a := number;
-        b := 10 * a + 10 * number / 4;
-        c := a - - b
-    END;
-
-    x := 11;
-    devasnh := 111;
-END.
+chintn := 100//3;
+chintan := chintn/3;
+number := 2;
+a := number;
+b := 10 * a + 10 * number / 4;
+c := a - - b;
+x := 11;
+devasnh := 10;
+chintan := 14000;
